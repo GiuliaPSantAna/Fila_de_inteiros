@@ -1,0 +1,87 @@
+#include <iostream>
+
+// O tamanho máximo definido para a fila
+#define MAX 7  
+                 
+class Fila {
+private:
+    int inicio;
+    int fim;
+    int tam;
+    int capacidade;
+    int vet[MAX];
+
+public:
+    Fila() : inicio(0), fim(0), tam(0), capacidade(MAX) {}
+
+    bool eCheia() const {             // Verifica se a fila está cheia
+        return (tam == capacidade);
+    }
+    
+    bool eVazia() const {             // Verifica se a fila está vazia
+        return (tam == 0);
+    }
+    
+    bool verificarInicio(int &valor) const {       // Verifica o início da fila
+        if (eVazia()) {
+            return false;  
+        }                             // A fila encontra-se vazia
+        valor = vet[inicio];
+        return true;
+    }
+
+    bool insercao(int valor) {        // Insere no final da fila
+        if (eCheia()) {
+            return false;  
+        }                             // A fila encontra-se cheia
+        vet[fim] = valor;
+        fim = (fim + 1) % capacidade;
+        tam++;
+        return true;
+    }
+
+    bool remocao(int &valor) {          // Remove do início da fila
+        if (eVazia()) {
+            return false;  
+        }                             // A fila encontra-se vazia
+        valor = vet[inicio];
+        inicio = (inicio + 1) % capacidade;
+        tam--;
+        return true;
+    }
+
+};
+
+int main() {
+    Fila fila;
+    int valor;
+
+    std::cout << "Realizando a inserção dos valores na fila:" << std::endl;        // Testes com exemplos
+    for (int i = 1; i <= 8; i++) {
+        if (fila.insercao(i)) {
+            std::cout << "Valores inseridos: " << i << std::endl;
+        } else {
+            std::cout << "Falha na tentativa de inserção " << i << ". Fila encontra-se cheia!" << std::endl;
+        }
+    }
+
+    std::cout << "\nRealizando consulta do início da fila:" << std::endl;
+    if (fila.verificarInicio(valor)) {
+        std::cout << "Início da fila é: " << valor << std::endl;
+    } else {
+        std::cout << "Fila encontra-se vazia!" << std::endl;
+    }
+
+    std::cout << "\nRealizando a remoção dos valores da fila:" << std::endl;
+    while (!fila.eVazia()) {
+        if (fila.remocao(valor)) {
+            std::cout << "Valores removidos: " << valor << std::endl;
+        }
+    }
+
+    if (fila.eVazia()) {
+        std::cout << "Fila encontra-se vazia!" << std::endl;
+    }
+
+    return 0;
+}
